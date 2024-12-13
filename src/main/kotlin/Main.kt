@@ -1,6 +1,5 @@
 package org.example
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.decodeFromString
 
 
 public lateinit var products : List<Product>
@@ -11,27 +10,27 @@ public lateinit var orders : List<Order>
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 fun main() {
 
-    ImportJsonData()
+    importJsonData()
 
 }
 
 // Function responsible for Importing Json Data
-fun ImportJsonData(){
+fun importJsonData(){
 
     val json = Json{ignoreUnknownKeys = true}
 
     // Importing in Product Data
-    products = json.decodeFromString<List<Product>>(GetJsonStringData("/products.json"));
+    products = json.decodeFromString<List<Product>>(getJsonStringData("/products.json"));
 
     // Importing in Discount Data
-    discounts = json.decodeFromString<List<Discount>>(GetJsonStringData("/discounts.json"));
+    discounts = json.decodeFromString<List<Discount>>(getJsonStringData("/discounts.json"));
 
     // Importing in Order Data
-    orders = json.decodeFromString<List<Order>>(GetJsonStringData("/orders.json"));
+    orders = json.decodeFromString<List<Order>>(getJsonStringData("/orders.json"));
 
 }
 
-fun GetJsonStringData(inputString : String) : String {
+fun getJsonStringData(inputString : String) : String {
     return object {}.javaClass.getResource(inputString)?.readText()
         ?: throw IllegalArgumentException("Json File has not been found or not valid")
 }
