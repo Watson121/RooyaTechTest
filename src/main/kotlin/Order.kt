@@ -4,7 +4,7 @@ import kotlinx.serialization.json.Json
 
 @Serializable
 data class Item(
-    val sku: Long,
+    val sku: Int,
     val quantity: Long,
 )
 

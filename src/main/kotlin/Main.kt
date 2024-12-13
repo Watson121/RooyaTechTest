@@ -11,8 +11,13 @@ public lateinit var orders : List<Order>
 fun main() {
 
     importJsonData()
+    var totalSalesBeforeDiscount : Double = totalSalesBeforeDiscount();
+
+    println("Total Sales Before Discount: £$totalSalesBeforeDiscount");
 
 }
+
+//region Importing Json
 
 // Function responsible for Importing Json Data
 fun importJsonData(){
@@ -30,7 +35,31 @@ fun importJsonData(){
 
 }
 
+// Getter function for Getting Json Data
 fun getJsonStringData(inputString : String) : String {
     return object {}.javaClass.getResource(inputString)?.readText()
         ?: throw IllegalArgumentException("Json File has not been found or not valid")
 }
+
+//endregion
+
+// Calculating the total amount of sales, before the discount is applied
+fun totalSalesBeforeDiscount() : Double{
+
+    var totalSales : Double = 0.0
+
+    for(order in orders){
+        for(item in order.items){
+            val product = products.find { it.sku == item.sku }
+
+            if(product != null){
+                totalSales += (product.price * item.quantity)
+            }
+        }
+    }
+
+    return totalSales;
+}
+
+
+
