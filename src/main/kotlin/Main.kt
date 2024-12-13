@@ -6,18 +6,18 @@ public lateinit var products : List<Product>
 public lateinit var discounts : List<Discount>
 public lateinit var orders : List<Order>
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 fun main() {
 
     importJsonData()
     val totalSalesBeforeDiscount : Double = totalSalesBeforeDiscount();
     val totalSalesAfterDiscount : Double = totalSalesAfterDiscount();
     val totalAmountOfMoneyLost = totalSalesBeforeDiscount - totalSalesAfterDiscount;
+    val averageDiscount : Double = averageDiscount();
 
     println("Total Sales Before Discount: £${"%.2f".format(totalSalesBeforeDiscount)}")
     println("Total Sales After Discount: £${"%.2f".format(totalSalesAfterDiscount)}")
     println("Total Sales After Discount: £${"%.2f".format(totalAmountOfMoneyLost)}")
+    println("Average Discount Per Customer: $averageDiscount%")
 }
 
 //region Importing Json
@@ -45,6 +45,8 @@ fun getJsonStringData(inputString : String) : String {
 }
 
 //endregion
+
+//region Calculations
 
 // Calculating the total amount of sales, before the discount is applied
 fun totalSalesBeforeDiscount() : Double{
@@ -83,8 +85,6 @@ fun totalSalesAfterDiscount() : Double {
                 if(product != null){
                     val productPrice = product.price * (1 - discount.value);
                     totalSales += (productPrice * item.quantity)
-                }else{
-                    throw IllegalStateException("Product is missing")
                 }
             }
         }
@@ -93,6 +93,24 @@ fun totalSalesAfterDiscount() : Double {
     return totalSales;
 }
 
+// Calculating the average discount per a customer
+fun averageDiscount() : Double{
 
+    var averageDiscount : Double = 0.0;
+    var customersWithDiscount : Int = 0;
+
+    for(order in orders){
+        val discount = discounts.find{it.key == order.discount}
+
+        if(discount != null){
+            customersWithDiscount++
+            averageDiscount += discount.value
+        }
+    }
+
+    return (averageDiscount / customersWithDiscount) * 100.0;
+}
+
+//endregion
 
 
