@@ -1,12 +1,18 @@
 package org.example
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 
-data class Order(
-    val orderId: Long,
-    val discount: String?,
-    val items: List<Item>,
-)
-
+@Serializable
 data class Item(
     val sku: Long,
     val quantity: Long,
 )
+
+@Serializable
+data class Order(
+    val orderId: Long,
+    val discount: String? = null,
+    val items: List<Item> = emptyList(),
+)
+
+
