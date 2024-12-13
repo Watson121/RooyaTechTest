@@ -11,10 +11,13 @@ public lateinit var orders : List<Order>
 fun main() {
 
     importJsonData()
-    var totalSalesBeforeDiscount : Double = totalSalesBeforeDiscount();
+    val totalSalesBeforeDiscount : Double = totalSalesBeforeDiscount();
+    val totalSalesAfterDiscount : Double = totalSalesAfterDiscount();
+    val totalAmountOfMoneyLost = totalSalesBeforeDiscount - totalSalesAfterDiscount;
 
-    println("Total Sales Before Discount: £$totalSalesBeforeDiscount");
-
+    println("Total Sales Before Discount: £${"%.2f".format(totalSalesBeforeDiscount)}")
+    println("Total Sales After Discount: £${"%.2f".format(totalSalesAfterDiscount)}")
+    println("Total Sales After Discount: £${"%.2f".format(totalAmountOfMoneyLost)}")
 }
 
 //region Importing Json
@@ -54,12 +57,42 @@ fun totalSalesBeforeDiscount() : Double{
 
             if(product != null){
                 totalSales += (product.price * item.quantity)
+            }else{
+                throw IllegalStateException("Product is missing")
             }
         }
     }
 
     return totalSales;
 }
+
+// Calculating the total sales amount, after the discount is applied
+fun totalSalesAfterDiscount() : Double {
+
+    var totalSales : Double = 0.0
+
+    for(order in orders){
+
+        val discount = discounts.find{it.key == order.discount}
+
+        if(discount != null){
+
+            for(item in order.items){
+                val product = products.find { it.sku == item.sku }
+
+                if(product != null){
+                    val productPrice = product.price * (1 - discount.value);
+                    totalSales += (productPrice * item.quantity)
+                }else{
+                    throw IllegalStateException("Product is missing")
+                }
+            }
+        }
+    }
+
+    return totalSales;
+}
+
 
 
 
