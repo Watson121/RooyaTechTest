@@ -17,7 +17,7 @@ fun main() {
     println("Total Sales Before Discount: £${"%.2f".format(totalSalesBeforeDiscount)}")
     println("Total Sales After Discount: £${"%.2f".format(totalSalesAfterDiscount)}")
     println("Total Sales After Discount: £${"%.2f".format(totalAmountOfMoneyLost)}")
-    println("Average Discount Per Customer: $averageDiscount%")
+    println("Average Discount Per Customer: ${"%.2f".format(averageDiscount)}%")
 }
 
 //region Importing Json
