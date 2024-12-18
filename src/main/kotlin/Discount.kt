@@ -6,4 +6,6 @@ import kotlinx.serialization.json.Json
 data class Discount(
     val key: String,
     val value: Double,
+    val stacks: String?
 )
+
