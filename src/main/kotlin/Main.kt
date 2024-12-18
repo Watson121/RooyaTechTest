@@ -102,6 +102,22 @@ fun totalSalesAfterDiscount() : Double {
     return totalSales
 }
 
+// Checking if discounts can be stacked or not
+fun canStack(discount : Discount) : Boolean{
+
+    if(discount.stacks != null){
+
+        if(discount.stacks == "TRUE"){
+            return true;
+        }else if(discount.stacks == "FALSE"){
+            return false;
+        }
+
+    }
+
+    return false;
+}
+
 // Calculating the average discount per a customer
 fun averageDiscount() : Double{
 
