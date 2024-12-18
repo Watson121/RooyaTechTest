@@ -87,6 +87,15 @@ fun totalSalesAfterDiscount() : Double {
                     totalSales += (productPrice * item.quantity)
                 }
             }
+        }else{
+
+            for(item in order.items) {
+                val product = products.find { it.sku == item.sku }
+
+                if (product != null) {
+                    totalSales += (product.price * item.quantity)
+                }
+            }
         }
     }
 
