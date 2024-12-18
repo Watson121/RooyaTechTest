@@ -2,9 +2,9 @@ package org.example
 import kotlinx.serialization.json.Json
 
 
-public lateinit var products : List<Product>
-public lateinit var discounts : List<Discount>
-public lateinit var orders : List<Order>
+lateinit var products : List<Product>
+lateinit var discounts : List<Discount>
+lateinit var orders : List<Order>
 
 fun main() {
 
@@ -105,8 +105,8 @@ fun totalSalesAfterDiscount() : Double {
 // Calculating the average discount per a customer
 fun averageDiscount() : Double{
 
-    var averageDiscount : Double = 0.0;
-    var customersWithDiscount : Int = 0;
+    var averageDiscount : Double = 0.0
+    var customersWithDiscount : Int = 0
 
     for(order in orders){
         val discount = discounts.find{it.key == order.discount}
@@ -117,7 +117,7 @@ fun averageDiscount() : Double{
         }
     }
 
-    return (averageDiscount / customersWithDiscount) * 100.0;
+    return (averageDiscount / customersWithDiscount) * 100.0
 }
 
 //endregion
