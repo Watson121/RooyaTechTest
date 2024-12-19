@@ -78,14 +78,13 @@ fun totalSalesAfterDiscount() : Double {
 
         var discount : Discount? = null
 
-
-
+        // Checking if the discount code contains a comma or not
+        // If it does, it needs to be brokendown
         if(order.discount?.contains(",") == true){
             breakDownDiscountCode(order.discount)
         }
 
         discount = discounts.find{it.key == order.discount}
-        println("Discount Code: ${discount?.key} with the value being: ${discount?.value}" )
 
         if(discount != null){
 
@@ -120,18 +119,21 @@ fun breakDownDiscountCode(key : String){
     val discountCodes = key.split(",")
     var canStack : Boolean = false;
 
+    // Iterating through the discount codes to see if they can be stacked or not
     for(discountCode in discountCodes){
         val discount = discounts.find{it.key == discountCode}
 
         if(discount != null){
 
+            // Making sure the can be stacked cannot be reset once activated
             if(!canStack) {
                 canStack = canStack(discount)
             }
 
+            // If discount codes can be stacked, then add on discount value
             if(canStack){
                 newDiscountKey = key
-                newDiscountValue += discount.value;
+                newDiscountValue += discount.value
             }else{
                 newDiscountValue = discount.value
             }
@@ -141,7 +143,7 @@ fun breakDownDiscountCode(key : String){
     // Formating the Double
     val df = DecimalFormat("#.0")
 
-    // Adding a new discount
+    // Adding a new discount to the discount list
     discounts.add(Discount(newDiscountKey, df.format(newDiscountValue).toDouble()))
 }
 
@@ -151,14 +153,14 @@ fun canStack(discount: Discount?) : Boolean{
     if(discount?.stacks != null){
 
         if(discount.stacks == "TRUE"){
-            return true;
+            return true
         }else if(discount.stacks == "FALSE"){
-            return false;
+            return false
         }
 
     }
 
-    return false;
+    return false
 }
 
 // Calculating the average discount per a customer
