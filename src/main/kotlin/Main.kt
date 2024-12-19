@@ -1,9 +1,10 @@
 package org.example
 import kotlinx.serialization.json.Json
+import java.text.DecimalFormat
 
 
 lateinit var products : List<Product>
-lateinit var discounts : List<Discount>
+lateinit var discounts : MutableList<Discount>
 lateinit var orders : List<Order>
 
 fun main() {
@@ -31,7 +32,7 @@ fun importJsonData(){
     products = json.decodeFromString<List<Product>>(getJsonStringData("/products.json"))
 
     // Importing in Discount Data
-    discounts = json.decodeFromString<List<Discount>>(getJsonStringData("/discounts.json"))
+    discounts = json.decodeFromString<MutableList<Discount>>(getJsonStringData("/discounts.json"))
 
     // Importing in Order Data
     orders = json.decodeFromString<List<Order>>(getJsonStringData("/orders.json"))
@@ -75,7 +76,16 @@ fun totalSalesAfterDiscount() : Double {
 
     for(order in orders){
 
-        val discount = discounts.find{it.key == order.discount}
+        var discount : Discount? = null
+
+
+
+        if(order.discount?.contains(",") == true){
+            breakDownDiscountCode(order.discount)
+        }
+
+        discount = discounts.find{it.key == order.discount}
+        println("Discount Code: ${discount?.key} with the value being: ${discount?.value}" )
 
         if(discount != null){
 
@@ -100,6 +110,55 @@ fun totalSalesAfterDiscount() : Double {
     }
 
     return totalSales
+}
+
+// Breaking down the discount code, and adding this new discount to the discount list
+fun breakDownDiscountCode(key : String){
+
+    var newDiscountKey : String = ""
+    var newDiscountValue : Double = 0.0;
+    val discountCodes = key.split(",")
+    var canStack : Boolean = false;
+
+    for(discountCode in discountCodes){
+        val discount = discounts.find{it.key == discountCode}
+
+        if(discount != null){
+
+            if(!canStack) {
+                canStack = canStack(discount)
+            }
+
+            if(canStack){
+                newDiscountKey = key
+                newDiscountValue += discount.value;
+            }else{
+                newDiscountValue = discount.value
+            }
+        }
+    }
+
+    // Formating the Double
+    val df = DecimalFormat("#.0")
+
+    // Adding a new discount
+    discounts.add(Discount(newDiscountKey, df.format(newDiscountValue).toDouble()))
+}
+
+// Checking if discounts can be stacked or not
+fun canStack(discount: Discount?) : Boolean{
+
+    if(discount?.stacks != null){
+
+        if(discount.stacks == "TRUE"){
+            return true;
+        }else if(discount.stacks == "FALSE"){
+            return false;
+        }
+
+    }
+
+    return false;
 }
 
 // Calculating the average discount per a customer
