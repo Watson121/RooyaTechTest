@@ -133,7 +133,7 @@ fun breakDownDiscountCode(key : String){
             // If discount codes can be stacked, then add on discount value
             if(canStack){
                 newDiscountKey = key
-                newDiscountValue += discount.value;
+                newDiscountValue += discount.value
             }else{
                 newDiscountValue = discount.value
             }
@@ -153,14 +153,14 @@ fun canStack(discount: Discount?) : Boolean{
     if(discount?.stacks != null){
 
         if(discount.stacks == "TRUE"){
-            return true;
+            return true
         }else if(discount.stacks == "FALSE"){
-            return false;
+            return false
         }
 
     }
 
-    return false;
+    return false
 }
 
 // Calculating the average discount per a customer
